@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+#[ApiResource()]
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name:'`user`')]
@@ -17,22 +19,26 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+     
+   
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    protected $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    protected $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    protected $roles = [];
 
     #[ORM\Column(type: 'string')]
-    private $password;
+    protected $password;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $nomComplet;
+    protected $nomComplet;
 
     public function getId(): ?int
     {
@@ -115,4 +121,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }

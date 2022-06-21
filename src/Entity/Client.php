@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ClientRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+
+#[ApiResource()]
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private $id;
-
+  
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $telephone;
 
