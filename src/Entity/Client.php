@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use App\Entity\Commande;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ApiResource()]
 
@@ -15,11 +18,13 @@ class Client extends User
   
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $telephone;
-
-    public function getId(): ?int
+    
+    public function __construct()
     {
-        return $this->id;
+        parent::__construct();
+        // $this->commandes = new ArrayCollection();
     }
+
 
     public function getTelephone(): ?string
     {
@@ -32,4 +37,8 @@ class Client extends User
 
         return $this;
     }
+
+ 
+
+
 }

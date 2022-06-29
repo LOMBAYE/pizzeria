@@ -19,9 +19,8 @@ class Livreur extends User
     #[ORM\Column(type: 'string', length: 255)]
     private $etat;
 
-    public function getId(): ?int
-    {
-        return $this->id;
+    public function __construct(){
+       parent::__construct();
     }
 
     public function getMatricule(): ?string

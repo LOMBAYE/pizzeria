@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProduitRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+
+#[ApiResource()]
+
+#[ORM\Entity(repositoryClass: ProduitRepository::class)]
+#[ORM\Table(name:'`produit`')]
+
+
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn(name:"type", type:"string")]
+#[ORM\DiscriminatorMap(["burger"=>"Burger", "menu"=>"Menu", "boissons"=>"BoissonTaille","frites"=>"FritesPortion"])]
+class Produit
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    protected $id;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    protected $nom;
+
+    #[ORM\Column(type: 'integer')]
+    protected $prix;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected $image;
+
+    #[ORM\Column(type: 'boolean')]
+    protected $isEtat=true;
+
+    #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produits')]
+    protected $gestionnaire;
+
+    public function __construct()
+    {
+        // $this->commandes = new ArrayCollection();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrix(): ?int
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(int $prix): self
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function isIsEtat(): ?bool
+    {
+        return $this->isEtat;
+    }
+
+    public function setIsEtat(bool $isEtat): self
+    {
+        $this->isEtat = $isEtat;
+
+        return $this;
+    }
+
+    public function getGestionnaire(): ?Gestionnaire
+    {
+        return $this->gestionnaire;
+    }
+
+    public function setGestionnaire(?Gestionnaire $gestionnaire): self
+    {
+        $this->gestionnaire = $gestionnaire;
+
+        return $this;
+    }
+
+ 
+
+}
