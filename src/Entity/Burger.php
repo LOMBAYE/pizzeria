@@ -8,9 +8,9 @@ use App\Repository\BurgerRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 #[ApiResource()]
-
 #[ORM\Entity(repositoryClass: BurgerRepository::class)]
 class Burger extends Produit
 {
    
+
 }

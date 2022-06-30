@@ -1,0 +1,29 @@
+<?php
+
+namespace App\DataProvider;
+
+use App\Repository\MenuRepository;
+use App\Repository\BurgerRepository;
+use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
+use App\Entity\Burger;
+
+class CatalogueDataProvider implements ContextAwareCollectionDataProviderInterface{
+    public function __construct(MenuRepository $menu,BurgerRepository $burger) {
+        $this->menu = $menu;
+        $this->burger = $burger;
+    }
+    
+    public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
+    {
+        return Burger::class OR Menu::class === $resourceClass;
+    }
+
+    public function getCollection(string $resourceClass, string $operationName = null, array $context = []): iterable
+    {
+        $tab =  [];
+        $tab[] = $this->burger->findAll();
+        $tab[] = $this->menu->findAll();      
+        return $tab;
+        
+    }
+}

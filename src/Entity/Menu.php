@@ -27,6 +27,9 @@ class Menu  extends Produit
     #[ORM\ManyToMany(targetEntity: FritesPortion::class, inversedBy: 'menus')]
     private $frites;
 
+    // #[ORM\ManyToOne(targetEntity: Catalogue::class, inversedBy: 'menus')]
+    // private $catalogue;
+
     public function __construct()
     {   
         $this->burgers = new ArrayCollection();
@@ -106,6 +109,18 @@ class Menu  extends Produit
 
         return $this;
     }
+
+    // public function getCatalogue(): ?Catalogue
+    // {
+    //     return $this->catalogue;
+    // }
+
+    // public function setCatalogue(?Catalogue $catalogue): self
+    // {
+    //     $this->catalogue = $catalogue;
+
+    //     return $this;
+    // }
 
 
 }
