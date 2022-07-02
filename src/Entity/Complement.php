@@ -11,10 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 #[ApiResource(
     collectionOperations:[
         'GET' => [
-            'method' => 'GET',
             'path' => '/complements'
         ]
-    ]
+        ],
+    itemOperations:[]    
 )]
 
 // #[ORM\Entity(repositoryClass: ComplementRepository::class)]

@@ -16,7 +16,7 @@ class ComplementDataProvider implements ContextAwareCollectionDataProviderInterf
     
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return BoissonTaille::class or FritesPortion::class === $resourceClass;
+        return BoissonTaille::class OR FritesPortion::class === $resourceClass;
     }
 
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): iterable

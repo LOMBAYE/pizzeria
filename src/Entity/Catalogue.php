@@ -11,10 +11,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 #[ApiResource(
     collectionOperations:[
         'GET' => [
-            'method' => 'GET',
             'path' => '/catalogues',
         ]
-    ]
+        ],
+     itemOperations:[]   
 )]
 
 // #[ORM\Entity(repositoryClass: CatalogueRepository::class)]
