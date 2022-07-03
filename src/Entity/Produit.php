@@ -39,9 +39,12 @@ class Produit
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produits')]
     protected $gestionnaire;
 
+    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: LigneDeCommande::class)]
+    private $ligneDeCommandes;
+
     public function __construct()
     {
-        // $this->commandes = new ArrayCollection();
+        $this->ligneDeCommandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,6 +108,36 @@ class Produit
     public function setGestionnaire(?Gestionnaire $gestionnaire): self
     {
         $this->gestionnaire = $gestionnaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, LigneDeCommande>
+     */
+    public function getLigneDeCommandes(): Collection
+    {
+        return $this->ligneDeCommandes;
+    }
+
+    public function addLigneDeCommande(LigneDeCommande $ligneDeCommande): self
+    {
+        if (!$this->ligneDeCommandes->contains($ligneDeCommande)) {
+            $this->ligneDeCommandes[] = $ligneDeCommande;
+            $ligneDeCommande->setProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLigneDeCommande(LigneDeCommande $ligneDeCommande): self
+    {
+        if ($this->ligneDeCommandes->removeElement($ligneDeCommande)) {
+            // set the owning side to null (unless already changed)
+            if ($ligneDeCommande->getProduit() === $this) {
+                $ligneDeCommande->setProduit(null);
+            }
+        }
 
         return $this;
     }

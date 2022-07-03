@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ZoneRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ZoneRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+
+#[ApiResource()]
 
 #[ORM\Entity(repositoryClass: ZoneRepository::class)]
 class Zone
@@ -22,14 +25,18 @@ class Zone
     private $coutLivraison;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $isEtat;
+    private $isEtat=true;
 
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Livraison::class)]
     private $livraisons;
 
+    #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Quartier::class)]
+    private $quartiers;
+
     public function __construct()
     {
         $this->livraisons = new ArrayCollection();
+        $this->quartiers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -102,4 +109,36 @@ class Zone
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Quartier>
+     */
+    public function getQuartiers(): Collection
+    {
+        return $this->quartiers;
+    }
+
+    public function addQuartier(Quartier $quartier): self
+    {
+        if (!$this->quartiers->contains($quartier)) {
+            $this->quartiers[] = $quartier;
+            $quartier->setZone($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuartier(Quartier $quartier): self
+    {
+        if ($this->quartiers->removeElement($quartier)) {
+            // set the owning side to null (unless already changed)
+            if ($quartier->getZone() === $this) {
+                $quartier->setZone(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

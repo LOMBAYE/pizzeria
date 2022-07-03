@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-// #[ApiResource()]
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name:'`user`')]
