@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations:[
-        'get'=>[
+        'get','post'=>[
             'method' => 'GET',
             'normalization_context'=>[
                 'groups'=>[
@@ -37,7 +37,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'path'=>'users/validate/{token}',
             'controller'=>ValidEmailActions::class
         ]
-    ]
+        ],
+        itemOperations:[]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface{
    
@@ -46,7 +47,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface{
     #[ORM\Column(type: 'integer')]
     protected $id;
 
-    #[Groups(['read:users'])]
+    
+    #[Groups(['read:users',"all"])]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     protected $email;
 
@@ -57,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface{
     #[ORM\Column(type: 'string')]
     protected $password;
 
-    #[Groups(['read:users'])]
+    #[Groups(['read:users','all'])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $nomComplet;
 
@@ -65,15 +67,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface{
     #[SerializedName("password")]
     protected $plainPassword;
 
-    #[Groups(['read:users'])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $token;
 
-    #[Groups(['read:users'])]
     #[ORM\Column(type: 'boolean')]
     protected $isEnable=false;
 
-    #[Groups(['read:users'])]
     #[ORM\Column(type: 'datetime')]
     protected $expireAt;
 

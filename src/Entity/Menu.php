@@ -4,20 +4,47 @@ namespace App\Entity;
 
 use App\Entity\Burger;
 use App\Entity\Produit;
-use App\Entity\Catalogue;
-use App\Entity\Complement;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
-
-#[ApiResource()]
+use Symfony\Component\Validator\Constraints as Assert;
+#[ApiResource(
+    collectionOperations:[
+        "GET"=>[
+            'normalization_context' => ['groups' => ['simple']],
+        ],"POST"=>[
+            'normalization_context' => ['groups' => ['simple']],
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message"=>"Vous n'avez pas access à cette Ressource", 
+        ]
+        ],
+        itemOperations:[
+            "get"=>[
+            'method' => 'get',
+            "path"=>"/menus/{id}" ,
+            'requirements' => ['id' => '\d+'],
+            'normalization_context' => ['groups' => ['all']],
+            ],
+            "delete"=>[
+                "path"=>"/menus/{id}",
+                'normalization_context' => ['groups' => ['simple']],
+                "security" => "is_granted('ROLE_GESTIONNAIRE')",
+                "security_message"=>"Vous n'avez pas access à cette Ressource",  
+            ],
+            "put"=>[
+                'normalization_context' => ['groups' => ['simple']],
+                "security" => "is_granted('ROLE_GESTIONNAIRE')",
+                "security_message"=>"Vous n'avez pas access à cette Ressource", 
+            ]
+            ]
+)]
 
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
 class Menu  extends Produit
 {
-   
+    #[Assert\NotBlank(message:"Burger Obligatoire")]
     #[ORM\ManyToMany(targetEntity: Burger::class, inversedBy: 'menus')]
     private $burgers;
 
@@ -105,18 +132,5 @@ class Menu  extends Produit
 
         return $this;
     }
-
-    // public function getCatalogue(): ?Catalogue
-    // {
-    //     return $this->catalogue;
-    // }
-
-    // public function setCatalogue(?Catalogue $catalogue): self
-    // {
-    //     $this->catalogue = $catalogue;
-
-    //     return $this;
-    // }
-
 
 }

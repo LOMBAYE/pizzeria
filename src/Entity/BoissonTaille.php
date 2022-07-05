@@ -9,7 +9,36 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BoissonTailleRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations:[
+        "GET"=>[
+            'normalization_context' => ['groups' => ['simple']]
+        ],
+        "POST"=>[
+            'normalization_context' => ['groups' => ['simple']],
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message"=>"Vous n'avez pas access à cette Ressource",
+        ]
+        ],
+        itemOperations:[
+            "get"=>[
+            'method' => 'get',
+            "path"=>"/boisson_tailles/{id}" ,
+            'requirements' => ['id' => '\d+'],
+            'normalization_context' => ['groups' => ['all']],
+            ],
+            "delete"=>[
+                "path"=>"/boisson_tailles/{id}",
+                "security" => "is_granted('ROLE_GESTIONNAIRE')",
+                "security_message"=>"Vous n'avez pas access à cette Ressource", 
+            ],
+            "put"=>[
+                'normalization_context' => ['groups' => ['simple']],
+                "security" => "is_granted('ROLE_GESTIONNAIRE')",
+                "security_message"=>"Vous n'avez pas access à cette Ressource", 
+            ]
+            ]
+)]
 
 #[ORM\Entity(repositoryClass: BoissonTailleRepository::class)]
 class BoissonTaille extends Produit

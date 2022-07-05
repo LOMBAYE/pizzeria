@@ -2,13 +2,33 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations:[
+        "GET"=>[
+            'method' => 'get',
+            'normalization_context' => ['groups' => ['simple']]
+        ]
+        ],
+        itemOperations:[
+            "get"=>[
+            'method' => 'get',
+            "path"=>"/produits/{id}" ,
+            'requirements' => ['id' => '\d+'],
+            'normalization_context' => ['groups' => ['all']],
+            ],
+            "delete"=>[
+                "path"=>"/produits/{id}" 
+            ]
+            ]
+)]
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 #[ORM\Table(name:'`produit`')]
@@ -24,9 +44,12 @@ class Produit
     #[ORM\Column(type: 'integer')]
     protected $id;
 
+    #[Assert\NotBlank(message:"Le nom est Obligatoire")]
+    #[Groups(["all"])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $nom;
 
+    #[Groups([ "all"])]
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
@@ -36,8 +59,12 @@ class Produit
     #[ORM\Column(type: 'boolean')]
     protected $isEtat=true;
 
+    #[Groups(["all"])]
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'produits')]
     protected $gestionnaire;
+
+    // #[ORM\ManyToMany(targetEntity: Commande::class, mappedBy: 'produits')]
+    // private $commandes;
 
     #[ORM\OneToMany(mappedBy: 'produit', targetEntity: LigneDeCommande::class)]
     private $ligneDeCommandes;
@@ -45,6 +72,7 @@ class Produit
     public function __construct()
     {
         $this->ligneDeCommandes = new ArrayCollection();
+        // $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -141,6 +169,33 @@ class Produit
 
         return $this;
     }
+
+    // /**
+    //  * @return Collection<int, Commande>
+    //  */
+    // public function getCommandes(): Collection
+    // {
+    //     return $this->commandes;
+    // }
+
+    // public function addCommande(Commande $commande): self
+    // {
+    //     if (!$this->commandes->contains($commande)) {
+    //         $this->commandes[] = $commande;
+    //         $commande->addProduit($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeCommande(Commande $commande): self
+    // {
+    //     if ($this->commandes->removeElement($commande)) {
+    //         $commande->removeProduit($this);
+    //     }
+
+    //     return $this;
+    // }
 
  
 

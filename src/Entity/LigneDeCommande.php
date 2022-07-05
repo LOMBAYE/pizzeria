@@ -3,10 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\LigneDeCommandeRepository;
-
-#[ApiResource()]
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: LigneDeCommandeRepository::class)]
 class LigneDeCommande
@@ -16,14 +14,19 @@ class LigneDeCommande
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    #[Groups(["simple","read:simple"])]
     #[ORM\Column(type: 'integer')]
     private $quantite;
 
     #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'ligneDeCommandes')]
     private $commande;
 
+    #[Groups(["simple","read:simple"])]
     #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: 'ligneDeCommandes')]
     private $produit;
+
+    #[ORM\Column(type: 'integer')]
+    private $prix;
 
     public function getId(): ?int
     {
@@ -62,6 +65,18 @@ class LigneDeCommande
     public function setProduit(?Produit $produit): self
     {
         $this->produit = $produit;
+
+        return $this;
+    }
+
+    public function getPrix(): ?int
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(int $prix): self
+    {
+        $this->prix = $prix;
 
         return $this;
     }

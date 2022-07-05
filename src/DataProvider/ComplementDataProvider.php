@@ -2,13 +2,13 @@
 
 namespace App\DataProvider;
 
-use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
-use App\Entity\BoissonTaille;
-use App\Entity\FritesPortion;
+use App\Entity\Complement;
 use App\Repository\BoissonTailleRepository;
 use App\Repository\FritesPortionRepository;
+use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
+use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
 
-class ComplementDataProvider implements ContextAwareCollectionDataProviderInterface{
+class ComplementDataProvider implements ContextAwareCollectionDataProviderInterface,RestrictedDataProviderInterface{
     public function __construct(BoissonTailleRepository $boisson,FritesPortionRepository $frites) {
         $this->boisson = $boisson;
         $this->frites = $frites;
@@ -16,7 +16,7 @@ class ComplementDataProvider implements ContextAwareCollectionDataProviderInterf
     
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return BoissonTaille::class OR FritesPortion::class === $resourceClass;
+        return Complement::class === $resourceClass;
     }
 
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): iterable
@@ -26,6 +26,5 @@ class ComplementDataProvider implements ContextAwareCollectionDataProviderInterf
         $tab[] = $this->frites->findAll();
         
         return $tab;
-        
     }
 }

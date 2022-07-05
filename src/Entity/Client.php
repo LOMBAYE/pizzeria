@@ -9,16 +9,28 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations:[
+        'get','post'=>[
+            'normalization_context'=>[
+                'groups'=>[
+                    'read:users'
+                ]
+            ]
+        ],
+    ]
+)]
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
 {
-  
+    #[Groups(['read:users'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $telephone;
 
+    #[Groups(["commande"])]
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
     private $commandes;
     

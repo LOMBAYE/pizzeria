@@ -3,10 +3,13 @@
 namespace App\DataPersister;
 
 use App\Entity\Menu;
+use App\Entity\Burger;
 use App\Entity\Produit;
 use App\Entity\BoissonTaille;
 use App\Entity\FritesPortion;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 
 /**
@@ -33,9 +36,7 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
      */
     public function persist($data, array $context = [])
     {
-        if ($data instanceof BoissonTaille or $data instanceof FritesPortion) {
-            $data->setPrix((0));
-        } elseif ($data instanceof Menu) {
+        if ($data instanceof Menu) {
             $prix=0;
             foreach ($data ->getBurgers() as $burger){
                 $prix+=$burger->getPrix();
@@ -60,7 +61,20 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
      */
     public function remove($data, array $context = [])
     {
-        $this->_entityManager->remove($data);
+        if($data instanceof Burger){
+            $d=$data->getMenus();
+            $res=count($d);
+            dd($res);
+            // dd(count(($data->getMenus())));
+            if(count($data->getMenus())==0){
+                $data->setIsEtat(false);
+                // return new JsonResponse(['error' => 'PRODUIT EXISTANT DANS UN MENU!'],Response::HTTP_BAD_REQUEST);
+            }
+            
+        }else{
+            $data->setIsEtat(false);
+        }
+        $this->_entityManager->persist($data);
         $this->_entityManager->flush();
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Menu;
+use App\Entity\Burger;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CatalogueRepository;
+use App\DataProvider\CatalogueDataProvider;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ApiResource(
     collectionOperations:[
@@ -20,36 +23,36 @@ use ApiPlatform\Core\Annotation\ApiResource;
 // #[ORM\Entity(repositoryClass: CatalogueRepository::class)]
 class Catalogue
 {
-    #[ORM\Id]
+    /* #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private $id; */
 
-    #[ORM\OneToMany(mappedBy: 'catalogue', targetEntity: Menu::class)]
-    private $menus;
+    // #[ORM\OneToMany(mappedBy: 'catalogue', targetEntity: Menu::class)]
+    // private $menus;
 
-    #[ORM\OneToMany(mappedBy: 'catalogue', targetEntity: Burger::class)]
-    private $burgers;
+    // #[ORM\OneToMany(mappedBy: 'catalogue', targetEntity: Burger::class)]
+    // private $burgers;
 
-    public function __construct()
-    {
-        $this->menus = new ArrayCollection();
-        $this->burgers = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->menus = new ArrayCollection();
+    //     $this->burgers = new ArrayCollection();
+    // }
 
 
-    public function getId(): ?int
+   /*  public function getId(): ?int
     {
         return $this->id;
-    }
+    } */
 
-    /**
-     * @return Collection<int, Menu>
-     */
-    public function getMenus(): Collection
-    {
-        return $this->menus;
-    }
+    // /**
+    //  * @return Collection<int, Menu>
+    //  */
+    // public function getMenus(): Collection
+    // {
+    //     return $this->menus;
+    // }
 
     // public function addMenu(Menu $menu): self
     // {

@@ -16,7 +16,7 @@ class Livraison
     private $id;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $isEtat;
+    private $isEtat=true;
 
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
     private $zone;

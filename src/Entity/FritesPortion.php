@@ -8,7 +8,36 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FritesPortionRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations:[
+        "GET"=>[
+            'normalization_context' => ['groups' => ['simple']]
+        ],
+        "POST"=>[
+            'normalization_context' => ['groups' => ['simple']],
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message"=>"Vous n'avez pas access à cette Ressource", 
+        ]
+        ],
+        itemOperations:[
+            "get"=>[
+            "path"=>"/frites_portions/{id}" ,
+            'requirements' => ['id' => '\d+'],
+            'normalization_context' => ['groups' => ['all']],
+            ],
+            "delete"=>[
+                "path"=>"/frites_portions/{id}",
+                'normalization_context' => ['groups' => ['simple']],
+                "security" => "is_granted('ROLE_GESTIONNAIRE')",
+                "security_message"=>"Vous n'avez pas access à cette Ressource", 
+            ],
+            "put"=>[
+                'normalization_context' => ['groups' => ['simple']],
+                "security" => "is_granted('ROLE_GESTIONNAIRE')",
+                "security_message"=>"Vous n'avez pas access à cette Ressource", 
+            ]
+            ]
+)]
 #[ORM\Entity(repositoryClass: FritesPortionRepository::class)]
 class FritesPortion extends Produit
 {
@@ -18,9 +47,6 @@ class FritesPortion extends Produit
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'frites')]
     private $menus;
-
-    // #[ORM\ManyToOne(targetEntity: Complement::class, inversedBy: 'frites')]
-    // private $complement;
 
     public function __construct()
     {

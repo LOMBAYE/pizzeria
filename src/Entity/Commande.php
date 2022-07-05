@@ -2,13 +2,29 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations:[
+        "GET"=>[
+            'normalization_context' => ['groups' => ['commande']],
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message"=>"Vous n'avez pas acces à cette Ressource",
+        ],
+        "POST"=>[
+            'normalization_context' => ['groups' => ['read:simple']],
+            'denormalization_context' => ['groups' => ['simple']],
+            "security" => "is_granted('ROLE_CLIENT')",
+            "security_message"=>"Vous n'avez pas acces à cette Ressource",
+        ],
+        ],
+)]
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande 
@@ -23,27 +39,35 @@ class Commande
         return $this->id;
     }
 
+    
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $isEtat;
+    private $isEtat=true;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     private $numero;
 
+    #[Groups(["commande"])]
     #[ORM\Column(type: 'date', nullable: true)]
     private $date;
 
+    #[Groups(["commande"])]
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
     private $client;
 
-    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneDeCommande::class)]
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneDeCommande::class,cascade:['persist'])]
+    #[Groups(["simple","read:simple"])]
+    #[SerializedName("Produits")]
     private $ligneDeCommandes;
 
+    // #[Groups(["commande"])]
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
     private $livraison;
+
 
     public function __construct()
     {
         $this->ligneDeCommandes = new ArrayCollection();
+        $this->date=new \DateTime();
     }
 
     public function isIsEtat(): ?bool
@@ -94,6 +118,7 @@ class Commande
         return $this;
     }
 
+    // ajoute ? pour dire qu il peut etre nul
     /**
      * @return Collection<int, LigneDeCommande>
      */
@@ -135,4 +160,28 @@ class Commande
 
         return $this;
     }
+
+    // /**
+    //  * @return Collection<int, Produit>
+    //  */
+    // public function getProduits(): Collection
+    // {
+    //     return $this->produits;
+    // }
+
+    // public function addProduit(Produit $produit): self
+    // {
+    //     if (!$this->produits->contains($produit)) {
+    //         $this->produits[] = $produit;
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeProduit(Produit $produit): self
+    // {
+    //     $this->produits->removeElement($produit);
+
+    //     return $this;
+    // }
 }

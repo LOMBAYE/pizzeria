@@ -2,12 +2,13 @@
 
 namespace App\DataProvider;
 
+use App\Entity\Catalogue;
 use App\Repository\MenuRepository;
 use App\Repository\BurgerRepository;
 use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
-use App\Entity\Burger;
+use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 
-class CatalogueDataProvider implements ContextAwareCollectionDataProviderInterface{
+final class CatalogueDataProvider implements ContextAwareCollectionDataProviderInterface,RestrictedDataProviderInterface{
     public function __construct(MenuRepository $menu,BurgerRepository $burger) {
         $this->menu = $menu;
         $this->burger = $burger;
@@ -15,7 +16,7 @@ class CatalogueDataProvider implements ContextAwareCollectionDataProviderInterfa
     
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return Burger::class OR Menu::class === $resourceClass;
+        return Catalogue::class === $resourceClass;
     }
 
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): iterable
