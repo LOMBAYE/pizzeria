@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
             "security_message"=>"Vous n'avez pas acces à cette Ressource",
         ],
         "POST"=>[
-            'normalization_context' => ['groups' => ['read:simple']],
+            // 'normalization_context' => ['groups' => ['read:simple']],
             'denormalization_context' => ['groups' => ['simple']],
             "security" => "is_granted('ROLE_CLIENT')",
             "security_message"=>"Vous n'avez pas acces à cette Ressource",
@@ -50,12 +50,12 @@ class Commande
     #[ORM\Column(type: 'date', nullable: true)]
     private $date;
 
-    #[Groups(["commande"])]
+    #[Groups(["commande","livreur"])]
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
     private $client;
 
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneDeCommande::class,cascade:['persist'])]
-    #[Groups(["simple","read:simple"])]
+    #[Groups(["simple"])]
     #[SerializedName("Produits")]
     private $ligneDeCommandes;
 

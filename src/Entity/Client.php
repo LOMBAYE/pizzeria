@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
 {
-    #[Groups(['read:users'])]
+    #[Groups(['read:users','livreur'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $telephone;
 

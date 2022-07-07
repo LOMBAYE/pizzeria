@@ -23,14 +23,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations:[
-        'get','post'=>[
-            'method' => 'GET',
-            'normalization_context'=>[
-                'groups'=>[
-                    'read:users'
-                ]
-            ]
-        ],
         'change'=>[
             'method'=>'PATCH',
             'deserialize'=>false,
@@ -48,18 +40,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface{
     protected $id;
 
     
-    #[Groups(['read:users',"all"])]
+    #[Groups(["all"])]
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     protected $email;
 
-    #[Groups(['read:users'])]
     #[ORM\Column(type: 'json')]
     protected $roles = [];
 
     #[ORM\Column(type: 'string')]
     protected $password;
 
-    #[Groups(['read:users','all'])]
+    #[Groups(['all','livreur'])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $nomComplet;
 

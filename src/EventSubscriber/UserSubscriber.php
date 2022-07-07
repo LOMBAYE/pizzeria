@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\Produit;
 use App\Entity\Commande;
+use App\Entity\Livraison;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -37,14 +38,14 @@ class UserSubscriber implements EventSubscriberInterface
     }
 
     public function prePersist(LifecycleEventArgs $args) {
-   
         if ($args->getObject() instanceof Produit) {
-            
          $args->getObject()->setGestionnaire($this->getUser());
         }
         if ($args->getObject() instanceof Commande) {
-            
             $args->getObject()->setClient($this->getUser());
+        }
+        if ($args->getObject() instanceof Livraison) {
+            $args->getObject()->setGestionnaire($this->getUser());
         }
     }
 }

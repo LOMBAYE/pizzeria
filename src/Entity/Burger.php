@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
             'normalization_context' => ['groups' => ['simple']]
         ],
         "POST"=>[
-            'normalization_context' => ['groups' => ['simple']],
+            'normalization_context' => ['groups' => ['ajout:burger']],
             "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message"=>"Vous n'avez pas access à cette Ressource",
         ],

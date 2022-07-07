@@ -2,10 +2,21 @@
 
 namespace App\Entity;
 
-use App\Repository\LivraisonRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LivraisonRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+
+#[ApiResource(
+    collectionOperations:[
+        "POST"=>[
+            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            "security_message"=>"Vous n'avez pas acces à cette Ressource",
+        ]
+    ]
+)]
 
 #[ORM\Entity(repositoryClass: LivraisonRepository::class)]
 class Livraison
@@ -18,14 +29,19 @@ class Livraison
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $isEtat=true;
 
-    #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
-    private $zone;
-
+    #[Groups(["livreur"])]
     #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Commande::class)]
     private $commandes;
 
     #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'livraisons')]
     private $livreur;
+
+    #[Groups(["livreur"])]
+    #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
+    private $zone;
+
+    #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'livraisons')]
+    private $gestionnaire;
 
     public function __construct()
     {
@@ -45,18 +61,6 @@ class Livraison
     public function setIsEtat(?bool $isEtat): self
     {
         $this->isEtat = $isEtat;
-
-        return $this;
-    }
-
-    public function getZone(): ?Zone
-    {
-        return $this->zone;
-    }
-
-    public function setZone(?Zone $zone): self
-    {
-        $this->zone = $zone;
 
         return $this;
     }
@@ -103,6 +107,29 @@ class Livraison
         return $this;
     }
 
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?Zone $zone): self
+    {
+        $this->zone = $zone;
+
+        return $this;
+    }
+
+    public function getGestionnaire(): ?Gestionnaire
+    {
+        return $this->gestionnaire;
+    }
+
+    public function setGestionnaire(?Gestionnaire $gestionnaire): self
+    {
+        $this->gestionnaire = $gestionnaire;
+
+        return $this;
+    }
  
    
 }
