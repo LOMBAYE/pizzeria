@@ -41,6 +41,7 @@ class Produit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(["menu:simple"])]
     #[ORM\Column(type: 'integer')]
     protected $id;
 

@@ -43,8 +43,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 #[ORM\Entity(repositoryClass: BoissonTailleRepository::class)]
 class BoissonTaille extends Produit
 {
-    #[ORM\Column(type: 'float', nullable: true)]
-    private $taille;
+    #[ORM\Column(type: 'boolean')]
+    private $taille=true;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'boissons')]
     private $menus;

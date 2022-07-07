@@ -45,6 +45,7 @@ class FritesPortion extends Produit
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $portions;
 
+    
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'frites')]
     private $menus;
 

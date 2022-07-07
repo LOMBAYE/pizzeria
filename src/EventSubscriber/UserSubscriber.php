@@ -3,6 +3,7 @@
 namespace App\EventSubscriber;
 
 use App\Entity\Produit;
+use App\Entity\Commande;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -40,6 +41,10 @@ class UserSubscriber implements EventSubscriberInterface
         if ($args->getObject() instanceof Produit) {
             
          $args->getObject()->setGestionnaire($this->getUser());
+        }
+        if ($args->getObject() instanceof Commande) {
+            
+            $args->getObject()->setClient($this->getUser());
         }
     }
 }

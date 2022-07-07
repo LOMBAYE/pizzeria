@@ -38,8 +38,9 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
     {
         if ($data instanceof Menu) {
             $prix=0;
-            foreach ($data ->getBurgers() as $burger){
-                $prix+=$burger->getPrix();
+            foreach ($data ->getMenuBurgers() as $menuBurger){
+                dd($menuBurger->getBurgers()->getNom());
+                $prix+=$menuBurger->getBurgers()->getPrix()*$menuBurger->getQuantite();
             }
             foreach ($data->getBoissons() as $boisson){
                 $prix+=$boisson->getPrix();
@@ -62,11 +63,8 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
     public function remove($data, array $context = [])
     {
         if($data instanceof Burger){
-            $d=$data->getMenus();
-            $res=count($d);
-            dd($res);
-            // dd(count(($data->getMenus())));
-            if(count($data->getMenus())==0){
+          dd($data->getMenuBurgers());
+            if(count($data->getMenuBurgers())===0){
                 $data->setIsEtat(false);
                 // return new JsonResponse(['error' => 'PRODUIT EXISTANT DANS UN MENU!'],Response::HTTP_BAD_REQUEST);
             }
