@@ -35,6 +35,8 @@ class Livreur extends User
     public function __construct(){
        parent::__construct();
        $this->livraisons = new ArrayCollection();
+       $this->etat="disponible";
+       $this->matricule="MAT-".date("his");
     }
 
     public function getMatricule(): ?string

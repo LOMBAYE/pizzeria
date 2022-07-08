@@ -4,9 +4,12 @@ namespace App\EventSubscriber;
 
 use App\Entity\Produit;
 use App\Entity\Commande;
-use App\Entity\Livraison;
 use Doctrine\ORM\Events;
+use App\Entity\Livraison;
+use App\Repository\LivreurRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -15,8 +18,9 @@ class UserSubscriber implements EventSubscriberInterface
 {
     private ?TokenInterface $token;
 
-    public function __construct(TokenStorageInterface $tokenStorage){
+    public function __construct(TokenStorageInterface $tokenStorage,LivreurRepository $livreurRepo){
         $this->token = $tokenStorage->getToken();
+        $this->livreurRepo= $livreurRepo;
     }
     
     public static function getSubscribedEvents(): array{

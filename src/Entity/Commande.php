@@ -63,11 +63,15 @@ class Commande
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
     private $livraison;
 
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private $expedie=false;
+
 
     public function __construct()
     {
         $this->ligneDeCommandes = new ArrayCollection();
         $this->date=new \DateTime();
+        $this->numero="NUMERO".date("dmYhis");
     }
 
     public function isIsEtat(): ?bool
@@ -82,12 +86,12 @@ class Commande
         return $this;
     }
 
-    public function getNumero(): ?int
+    public function getNumero(): ?string
     {
         return $this->numero;
     }
 
-    public function setNumero(?int $numero): self
+    public function setNumero(?string $numero): self
     {
         $this->numero = $numero;
 
@@ -184,4 +188,16 @@ class Commande
 
     //     return $this;
     // }
+
+    public function isExpedie(): ?bool
+    {
+        return $this->expedie;
+    }
+
+    public function setExpedie(?bool $expedie): self
+    {
+        $this->expedie = $expedie;
+
+        return $this;
+    }
 }

@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ApiResource(
     collectionOperations:[
@@ -54,8 +55,12 @@ class Produit
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'blob')]
     protected $image;
+
+    #[Groups([ "all"])]
+    #[SerializedName("image")]
+    protected $bImage;
 
     #[ORM\Column(type: 'boolean')]
     protected $isEtat=true;
@@ -200,4 +205,24 @@ class Produit
 
  
 
+
+    /**
+     * Get the value of bImage
+     */ 
+    public function getBImage()
+    {
+        return $this->bImage;
+    }
+
+    /**
+     * Set the value of bImage
+     *
+     * @return  self
+     */ 
+    public function setBImage($bImage)
+    {
+        $this->bImage = $bImage;
+
+        return $this;
+    }
 }

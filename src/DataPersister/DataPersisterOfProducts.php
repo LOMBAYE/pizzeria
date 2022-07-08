@@ -51,6 +51,10 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
             $prix-=floor($prix*5/100);
             $data->setPrix($prix);
         }
+        if($data instanceof Produit){
+           $image=$data->getBImage();
+           $image=$data->setImage(file_get_contents($image));
+        }
         
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
