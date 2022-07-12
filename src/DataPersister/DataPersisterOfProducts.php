@@ -53,7 +53,7 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
         }
         if($data instanceof Produit){
            $image=$data->getBImage();
-           $image=$data->setImage(file_get_contents($image));
+           $data->setImage(file_get_contents($image));
         }
         
         $this->_entityManager->persist($data);
