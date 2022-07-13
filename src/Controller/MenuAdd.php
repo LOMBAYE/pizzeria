@@ -26,6 +26,7 @@ class MenuAdd extends AbstractController{
         $prix=0;
         $menu=new Menu();
         $menu->setNom($parameters->nom);
+        $menu->setImage(file_get_contents($parameters->bImage));
         foreach(($parameters->frites)[0] as $f){
             $frite=$friteRepo->find($f);
             if($frite){
