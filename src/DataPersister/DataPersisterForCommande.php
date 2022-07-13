@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
+use App\Entity\BoissonTaille;
+use App\Repository\BoissonTailleRepository;
 use App\Repository\LivreurRepository;
 
 /**
@@ -37,7 +39,15 @@ class DataPersisterForCommande implements ContextAwareDataPersisterInterface
     public function persist($data, array $context = [])
     {
         if ($data instanceof Commande) {
+            // dd($data->getLigneDeCommandes()[0]);
             foreach($data->getLigneDeCommandes() as $ligne) {
+                if($ligne->getProduit() instanceof BoissonTaille){
+                    if($ligne->getQuantite()>$ligne->getProduit()->getQteEnStock()){
+                        return new JsonResponse(['error' => 'Boisson En rupture de Stock'],Response::HTTP_BAD_REQUEST);
+                    }else{
+                        $ligne->getProduit()->setQteEnStock($ligne->getProduit()->getQteEnStock()-$ligne->getQuantite());
+                    }                 // $boisson=$this->boisTai->findById($ligne->getProduit()->getId());
+                }
                $ligne->setPrix(($ligne->getProduit()->getPrix())*($ligne->getQuantite()));
             }
         } 

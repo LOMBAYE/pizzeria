@@ -165,30 +165,6 @@ class Commande
         return $this;
     }
 
-    // /**
-    //  * @return Collection<int, Produit>
-    //  */
-    // public function getProduits(): Collection
-    // {
-    //     return $this->produits;
-    // }
-
-    // public function addProduit(Produit $produit): self
-    // {
-    //     if (!$this->produits->contains($produit)) {
-    //         $this->produits[] = $produit;
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeProduit(Produit $produit): self
-    // {
-    //     $this->produits->removeElement($produit);
-
-    //     return $this;
-    // }
-
     public function isExpedie(): ?bool
     {
         return $this->expedie;

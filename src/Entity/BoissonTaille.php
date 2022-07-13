@@ -49,6 +49,9 @@ class BoissonTaille extends Produit
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'boissons')]
     private $menus;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $qteEnStock;
+
     // #[ORM\ManyToOne(targetEntity: Complement::class, inversedBy: 'boissons')]
     // private $complement;
 
@@ -108,5 +111,17 @@ class BoissonTaille extends Produit
 
     //     return $this;
     // }
+
+    public function getQteEnStock(): ?int
+    {
+        return $this->qteEnStock;
+    }
+
+    public function setQteEnStock(?int $qteEnStock): self
+    {
+        $this->qteEnStock = $qteEnStock;
+
+        return $this;
+    }
 
 }
