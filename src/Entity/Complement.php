@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\BoissonTaille;
-use App\Entity\FritesPortion;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ComplementRepository;
 use Doctrine\Common\Collections\Collection;

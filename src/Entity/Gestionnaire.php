@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\GestionnaireRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ApiResource()]
@@ -17,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 #[ORM\Entity(repositoryClass: GestionnaireRepository::class)]
 class Gestionnaire extends User
 {
-   
+   #[ApiSubresource()]
     #[ORM\OneToMany(mappedBy: 'gestionnaire', targetEntity: Produit::class)]
     private $produits;
 

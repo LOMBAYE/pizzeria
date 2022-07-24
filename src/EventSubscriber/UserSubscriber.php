@@ -20,7 +20,6 @@ class UserSubscriber implements EventSubscriberInterface
 
     public function __construct(TokenStorageInterface $tokenStorage,LivreurRepository $livreurRepo){
         $this->token = $tokenStorage->getToken();
-        $this->livreurRepo= $livreurRepo;
     }
     
     public static function getSubscribedEvents(): array{

@@ -52,8 +52,8 @@ class BoissonTaille extends Produit
     #[ORM\Column(type: 'integer', nullable: true)]
     private $qteEnStock;
 
-    // #[ORM\ManyToOne(targetEntity: Complement::class, inversedBy: 'boissons')]
-    // private $complement;
+    #[ORM\ManyToOne(targetEntity: Complement::class, inversedBy: 'boissons')]
+    private $complement;
 
     public function __construct()
     {
@@ -96,22 +96,10 @@ class BoissonTaille extends Produit
         if ($this->menus->removeElement($menu)) {
             $menu->removeBoisson($this);
         }
-
         return $this;
     }
 
-    // public function getComplement(): ?Complement
-    // {
-    //     return $this->complement;
-    // }
-
-    // public function setComplement(?Complement $complement): self
-    // {
-    //     $this->complement = $complement;
-
-    //     return $this;
-    // }
-
+   
     public function getQteEnStock(): ?int
     {
         return $this->qteEnStock;

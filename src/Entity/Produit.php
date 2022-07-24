@@ -47,18 +47,18 @@ class Produit
     protected $id;
 
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
-    #[Groups(["all"])]
+    #[Groups(["all","simple"])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $nom;
 
-    #[Groups([ "all"])]
+    #[Groups([ "all","simple"])]
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
     #[ORM\Column(type: 'blob')]
     protected $image;
 
-    #[Groups([ "all"])]
+    #[Groups(["simple"])]
     #[SerializedName("image")]
     protected $bImage;
 
@@ -112,7 +112,7 @@ class Produit
 
     public function getImage(): ?string
     {
-        return $this->image;
+        return (is_resource($this->image)?utf8_encode(base64_encode(stream_get_contents($this->image))):$this->image); 
     }
 
     public function setImage(?string $image): self

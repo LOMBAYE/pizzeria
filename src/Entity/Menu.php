@@ -58,15 +58,17 @@ class Menu  extends Produit
 {
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
     #[Groups(["menu:simple"])]
-    // #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     protected $nom;
 
     #[Groups([ "menu:simple"])]
-    // #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer')]
     protected $prix;
-    // #[Assert\NotBlank(message:"Burger Obligatoire")]
-    // #[ORM\ManyToMany(targetEntity: Burger::class, inversedBy: 'menus')]
-    // private $burgers;
+
+    #[Assert\NotBlank(message:"Burger Obligatoire")]
+    #[ORM\ManyToMany(targetEntity: Burger::class, inversedBy: 'menus')]
+    private $burgers;
+    
     #[Groups(["menu:read","menu:simple"])]
     #[ORM\ManyToMany(targetEntity: BoissonTaille::class, inversedBy: 'menus',cascade:['persist'])]
     private $boissons;
@@ -80,37 +82,18 @@ class Menu  extends Produit
     #[SerializedName("Burgers")]
     private $menuBurgers;
 
+    // #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuTaille::class)]
+    // private $menuTailles;
+
     public function __construct()
     {   
         // $this->burgers = new ArrayCollection();
         $this->boissons = new ArrayCollection();
         $this->frites = new ArrayCollection();
         $this->menuBurgers = new ArrayCollection();
+        // $this->menuTailles = new ArrayCollection();
     }
 
-    // /**
-    //  * @return Collection<int, Burger>
-    //  */
-    // public function getBurgers(): Collection
-    // {
-    //     return $this->burgers;
-    // }
-
-    // public function addBurger(Burger $burger): self
-    // {
-    //     if (!$this->burgers->contains($burger)) {
-    //         $this->burgers[] = $burger;
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeBurger(Burger $burger): self
-    // {
-    //     $this->burgers->removeElement($burger);
-
-    //     return $this;
-    // }
 
     /**
      * @return Collection<int, BoissonTaille>
@@ -196,5 +179,35 @@ class Menu  extends Produit
         $menuBurger->setQuantite($qt);
         $this->addMenuBurger($menuBurger);
     }
+
+    // /**
+    //  * @return Collection<int, MenuTaille>
+    //  */
+    // public function getMenuTailles(): Collection
+    // {
+    //     return $this->menuTailles;
+    // }
+
+    // public function addMenuTaille(MenuTaille $menuTaille): self
+    // {
+    //     if (!$this->menuTailles->contains($menuTaille)) {
+    //         $this->menuTailles[] = $menuTaille;
+    //         $menuTaille->setMenu($this);
+    //     }
+
+    //     return $this;
+    // }
+
+    // public function removeMenuTaille(MenuTaille $menuTaille): self
+    // {
+    //     if ($this->menuTailles->removeElement($menuTaille)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($menuTaille->getMenu() === $this) {
+    //             $menuTaille->setMenu(null);
+    //         }
+    //     }
+
+    //     return $this;
+    // }
 
 }
