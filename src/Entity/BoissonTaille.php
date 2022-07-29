@@ -52,9 +52,6 @@ class BoissonTaille extends Produit
     #[ORM\Column(type: 'integer', nullable: true)]
     private $qteEnStock;
 
-    #[ORM\ManyToOne(targetEntity: Complement::class, inversedBy: 'boissons')]
-    private $complement;
-
     public function __construct()
     {
         parent::__construct();

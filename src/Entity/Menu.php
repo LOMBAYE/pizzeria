@@ -19,12 +19,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         "GET"=>[
             'normalization_context' => ['groups' => ['simple']],
         ],
-        "POST"=>[
-            'normalization_context' => ['groups' => ['menu:read']],
-            // 'denormalization_context' => ['groups' => ['menu:simple']],
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message"=>"Vous n'avez pas access à cette Ressource", 
-        ],
+
         'menu'=>[
             'method'=>'POST',
             'deserialize'=>false,
@@ -65,9 +60,6 @@ class Menu  extends Produit
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
-    #[Assert\NotBlank(message:"Burger Obligatoire")]
-    #[ORM\ManyToMany(targetEntity: Burger::class, inversedBy: 'menus')]
-    private $burgers;
     
     #[Groups(["menu:read","menu:simple"])]
     #[ORM\ManyToMany(targetEntity: BoissonTaille::class, inversedBy: 'menus',cascade:['persist'])]
@@ -87,11 +79,9 @@ class Menu  extends Produit
 
     public function __construct()
     {   
-        // $this->burgers = new ArrayCollection();
         $this->boissons = new ArrayCollection();
         $this->frites = new ArrayCollection();
         $this->menuBurgers = new ArrayCollection();
-        // $this->menuTailles = new ArrayCollection();
     }
 
 

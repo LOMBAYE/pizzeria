@@ -12,7 +12,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ApiResource(
-    normalizationContext:["groups"=>['catalogue:read']],
+    normalizationContext:["groups"=>['simple']],
     collectionOperations:[
         'GET' => [
             'path' => '/catalogues',

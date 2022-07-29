@@ -42,7 +42,7 @@ class Produit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["menu:simple"])]
+    #[Groups(["menu:simple","simple"])]
     #[ORM\Column(type: 'integer')]
     protected $id;
 
@@ -54,6 +54,8 @@ class Produit
     #[Groups([ "all","simple"])]
     #[ORM\Column(type: 'integer')]
     protected $prix;
+
+    #[Groups([ "all","simple"])]
 
     #[ORM\Column(type: 'blob')]
     protected $image;

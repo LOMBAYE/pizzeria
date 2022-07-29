@@ -22,8 +22,9 @@ final class CatalogueDataProvider implements ContextAwareCollectionDataProviderI
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): iterable
     {
         $tab =  [];
-        $tab[] = $this->burger->findAll();
-        $tab[] = $this->menu->findAll();      
+        $tab['burgers'] = $this->burger->findAll();
+        $tab['menus'] = $this->menu->findAll();
+        // dd($tab['burgers']);      
         return $tab;
         
     }

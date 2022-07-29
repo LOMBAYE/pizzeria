@@ -5,10 +5,11 @@ namespace App\Entity;
 use App\Entity\Menu;
 use App\Entity\Produit;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 use App\Repository\BurgerRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations:[
@@ -43,7 +44,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 #[ORM\Entity(repositoryClass: BurgerRepository::class)]
 class Burger extends Produit
 {
-   
+    #[Groups(["menu:simple"])]
     #[ORM\OneToMany(mappedBy: 'burgers', targetEntity: MenuBurger::class,cascade:['persist'])]
     private $menuBurgers;
 
@@ -81,6 +82,5 @@ class Burger extends Produit
 
         return $this;
     }
-
 
 }
