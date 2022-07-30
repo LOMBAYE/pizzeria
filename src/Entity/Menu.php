@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -52,26 +53,25 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 class Menu  extends Produit
 {
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
-    #[Groups(["menu:simple"])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $nom;
 
-    #[Groups([ "menu:simple"])]
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
-    
-    #[Groups(["menu:read","menu:simple"])]
-    #[ORM\ManyToMany(targetEntity: BoissonTaille::class, inversedBy: 'menus',cascade:['persist'])]
-    private $boissons;
+    #[Groups(["simple"])]
+    #[ORM\ManyToMany(targetEntity:Taille::class, inversedBy: 'menus',cascade:['persist'])]
+    #[ApiSubresource()]
+    private $tailles;
 
-    #[Groups(["menu:read","menu:simple"])]
+    #[Groups(["simple"])]
     #[ORM\ManyToMany(targetEntity: FritesPortion::class, inversedBy: 'menus',cascade:['persist'])]
+    #[ApiSubresource()]
     private $frites;
 
-    #[Groups(["menu:read","menu:simple"])]
+    #[Groups(["simple"])]
     #[ORM\OneToMany(mappedBy: 'menus', targetEntity: MenuBurger::class,cascade:['persist'])]
-    #[SerializedName("Burgers")]
+    #[SerializedName("burgers")]
     private $menuBurgers;
 
     // #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuTaille::class)]
@@ -79,32 +79,32 @@ class Menu  extends Produit
 
     public function __construct()
     {   
-        $this->boissons = new ArrayCollection();
+        $this->tailles = new ArrayCollection();
         $this->frites = new ArrayCollection();
         $this->menuBurgers = new ArrayCollection();
     }
 
 
     /**
-     * @return Collection<int, BoissonTaille>
+     * @return Collection<int, Taille>
      */
-    public function getBoissons(): Collection
+    public function getTailles(): Collection
     {
-        return $this->boissons;
+        return $this->tailles;
     }
 
-    public function addBoisson(BoissonTaille $boisson): self
+    public function addTaille(Taille $taille): self
     {
-        if (!$this->boissons->contains($boisson)) {
-            $this->boissons[] = $boisson;
+        if (!$this->tailles->contains($taille)) {
+            $this->tailles[] = $taille;
         }
 
         return $this;
     }
 
-    public function removeBoisson(BoissonTaille $boisson): self
+    public function removeTaille(Taille $taille): self
     {
-        $this->boissons->removeElement($boisson);
+        $this->tailles->removeElement($taille);
 
         return $this;
     }

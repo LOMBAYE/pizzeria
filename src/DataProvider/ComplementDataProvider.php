@@ -22,8 +22,8 @@ class ComplementDataProvider implements ContextAwareCollectionDataProviderInterf
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): iterable
     {
         $tab =  [];
-        $tab[] = $this->boisson->findAll();
-        $tab[] = $this->frites->findAll();
+        $tab['boissonTaille'] = $this->boisson->findAll();
+        $tab['frite'] = $this->frites->findAll();
         
         return $tab;
     }

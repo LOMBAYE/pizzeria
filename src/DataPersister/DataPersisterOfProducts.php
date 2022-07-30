@@ -5,6 +5,7 @@ namespace App\DataPersister;
 use App\Entity\Menu;
 use App\Entity\Burger;
 use App\Entity\Produit;
+use App\Entity\Taille;
 use App\Entity\BoissonTaille;
 use App\Entity\FritesPortion;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,8 +43,8 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
                 dd($menuBurger->getBurgers()->getNom());
                 $prix+=$menuBurger->getBurgers()->getPrix()*$menuBurger->getQuantite();
             }
-            foreach ($data->getBoissons() as $boisson){
-                $prix+=$boisson->getPrix();
+            foreach ($data->getTailles() as $taille){
+                // $prix+=$taille->getPrix();
             }
             foreach ($data->getFrites() as $frite){
                 $prix+=$frite->getPrix();

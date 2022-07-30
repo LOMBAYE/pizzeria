@@ -2,17 +2,18 @@
 namespace App\Controller;
 
 use App\Entity\Menu;
-use App\Repository\BoissonTailleRepository;
 use App\Repository\BurgerRepository;
-use App\Repository\FritesPortionRepository;
+use App\Repository\TailleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\BoissonTailleRepository;
+use App\Repository\FritesPortionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MenuAdd extends AbstractController{
  
     public function __invoke (EntityManagerInterface $manager,Request $request,BurgerRepository $burgerR,
-    FritesPortionRepository $friteRepo,BoissonTailleRepository $boissonRepo){
+    FritesPortionRepository $friteRepo,TailleRepository $tailleRepo){
         $parameters = json_decode($request->getContent());
         if(!isset($parameters->nom)){
             return  $this->json('Nom Obligatoire',400);
@@ -20,7 +21,7 @@ class MenuAdd extends AbstractController{
         if(!isset($parameters->burgers) || count($parameters->burgers) == 0){
             return  $this->json('Champ Burger Obligatoire',400);
         }
-        if(!isset($parameters->boissons) && !isset($parameters->frites)){
+        if(!isset($parameters->tailles) && !isset($parameters->frites)){
             return  $this->json('Un Complement est requis',400);
         }
         $prix=0;
@@ -36,13 +37,13 @@ class MenuAdd extends AbstractController{
                 return  $this->json('FRITE BII AMOUL!',400);
            }
         }
-        foreach(($parameters->boissons)[0] as $b){
-            $boisson=$boissonRepo->find($b);
-            if($boisson){
-                $prix+=$boisson->getPrix();
-                $menu->addBoisson($boisson);
+        foreach(($parameters->tailles)[0] as $b){
+            $taille=$tailleRepo->find($b);
+            if($taille){
+                // $prix+=$taille->getPrix();
+                $menu->addTaille($taille);
             }else{
-                return  $this->json('Boisson inexistante!',400);
+                return  $this->json('Taille inexistante!',400);
            }
         }
         foreach($parameters->burgers as $b) {

@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\Produit;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BoissonTailleRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations:[
@@ -41,62 +42,34 @@ use ApiPlatform\Core\Annotation\ApiResource;
 )]
 
 #[ORM\Entity(repositoryClass: BoissonTailleRepository::class)]
-class BoissonTaille extends Produit
+class BoissonTaille 
 {
-    #[ORM\Column(type: 'boolean')]
-    private $taille=true;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private $id;
 
-    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'boissons')]
-    private $menus;
-
+    #[Groups(["simple"])]
     #[ORM\Column(type: 'integer', nullable: true)]
     private $qteEnStock;
 
+    #[ORM\ManyToOne(targetEntity: Taille::class, inversedBy: 'boissonTailles')]
+    private $taille;
+
+    #[ORM\ManyToOne(targetEntity: Boisson::class, inversedBy: 'boissonTailles')]
+    private $boisson;
+
     public function __construct()
     {
-        parent::__construct();
-        $this->menus = new ArrayCollection();
+        // parent::__construct();
+        // $this->menus = new ArrayCollection();
     }
-
-    public function getTaille(): ?float
+     
+    public function getId(): ?int
     {
-        return $this->taille;
+        return $this->id;
     }
-
-    public function setTaille(?float $taille): self
-    {
-        $this->taille = $taille;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Menu>
-     */
-    public function getMenus(): Collection
-    {
-        return $this->menus;
-    }
-
-    public function addMenu(Menu $menu): self
-    {
-        if (!$this->menus->contains($menu)) {
-            $this->menus[] = $menu;
-            $menu->addBoisson($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMenu(Menu $menu): self
-    {
-        if ($this->menus->removeElement($menu)) {
-            $menu->removeBoisson($this);
-        }
-        return $this;
-    }
-
-   
+    
     public function getQteEnStock(): ?int
     {
         return $this->qteEnStock;
@@ -105,6 +78,30 @@ class BoissonTaille extends Produit
     public function setQteEnStock(?int $qteEnStock): self
     {
         $this->qteEnStock = $qteEnStock;
+
+        return $this;
+    }
+
+    public function getTaille(): ?Taille
+    {
+        return $this->taille;
+    }
+
+    public function setTaille(?Taille $taille): self
+    {
+        $this->taille = $taille;
+
+        return $this;
+    }
+
+    public function getBoisson(): ?Boisson
+    {
+        return $this->boisson;
+    }
+
+    public function setBoisson(?Boisson $boisson): self
+    {
+        $this->boisson = $boisson;
 
         return $this;
     }

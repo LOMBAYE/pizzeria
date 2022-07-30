@@ -37,7 +37,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name:"type", type:"string")]
-#[ORM\DiscriminatorMap(["burger"=>"Burger", "menu"=>"Menu", "boissons"=>"BoissonTaille","frites"=>"FritesPortion"])]
+#[ORM\DiscriminatorMap(["burger"=>"Burger", "menu"=>"Menu","boisson"=>"Boisson","frites"=>"FritesPortion"])]
 class Produit
 {
     #[ORM\Id]
@@ -56,11 +56,9 @@ class Produit
     protected $prix;
 
     #[Groups([ "all","simple"])]
-
     #[ORM\Column(type: 'blob')]
     protected $image;
 
-    #[Groups(["simple"])]
     #[SerializedName("image")]
     protected $bImage;
 
@@ -80,7 +78,6 @@ class Produit
     public function __construct()
     {
         $this->ligneDeCommandes = new ArrayCollection();
-        // $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
