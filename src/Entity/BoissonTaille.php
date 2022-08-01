@@ -10,36 +10,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource(
-    collectionOperations:[
-        "GET"=>[
-            'normalization_context' => ['groups' => ['simple']]
-        ],
-        "POST"=>[
-            'normalization_context' => ['groups' => ['simple']],
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message"=>"Vous n'avez pas access à cette Ressource",
-        ]
-        ],
-        itemOperations:[
-            "get"=>[
-            'method' => 'get',
-            "path"=>"/boisson_tailles/{id}" ,
-            'requirements' => ['id' => '\d+'],
-            'normalization_context' => ['groups' => ['all']],
-            ],
-            "delete"=>[
-                "path"=>"/boisson_tailles/{id}",
-                "security" => "is_granted('ROLE_GESTIONNAIRE')",
-                "security_message"=>"Vous n'avez pas access à cette Ressource", 
-            ],
-            "put"=>[
-                'normalization_context' => ['groups' => ['simple']],
-                "security" => "is_granted('ROLE_GESTIONNAIRE')",
-                "security_message"=>"Vous n'avez pas access à cette Ressource", 
-            ]
-            ]
-)]
+#[ApiResource()]
 
 #[ORM\Entity(repositoryClass: BoissonTailleRepository::class)]
 class BoissonTaille 
@@ -49,7 +20,6 @@ class BoissonTaille
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[Groups(["simple"])]
     #[ORM\Column(type: 'integer', nullable: true)]
     private $qteEnStock;
 

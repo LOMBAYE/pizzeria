@@ -16,6 +16,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 #[ApiResource(
+    subresourceOperations: [
+        'menu_get_subresource' => [
+            'method' => 'GET',
+            'path' => '/menus/{id}/tailles',
+        ],
+    ],
     collectionOperations:[
         "GET"=>[
             'normalization_context' => ['groups' => ['simple']],
@@ -59,7 +65,7 @@ class Menu  extends Produit
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
-    #[Groups(["simple"])]
+    #[Groups(["simple","all"])]
     #[ORM\ManyToMany(targetEntity:Taille::class, inversedBy: 'menus',cascade:['persist'])]
     #[ApiSubresource()]
     private $tailles;

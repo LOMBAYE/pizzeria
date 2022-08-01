@@ -2,27 +2,33 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TailleRepository;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TailleRepository::class)]
-#[ApiResource]
+#[ApiResource() ]
 class Taille
 {
+    #[Groups(["simple","all"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    #[Groups(["simple","all"])]
     #[ORM\Column(type: 'string', length: 255)]
     private $libelle;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'tailles')]
     private $menus;
 
+    #[ApiSubresource()] 
+    #[Groups(["simple","all"])]
     #[ORM\OneToMany(mappedBy: 'taille', targetEntity: BoissonTaille::class)]
     private $boissonTailles;
 

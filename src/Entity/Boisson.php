@@ -2,17 +2,25 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\BoissonRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BoissonRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: BoissonRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    subresourceOperations: [
+        'boisson_get_subresource' => [
+            'method' => 'GET',
+            'path' => '/boissons/{id}/boisson_tailles',
+        ],
+    ],
+)]
 class Boisson extends Produit
 {
-   
+    #[ApiSubresource()] 
     #[ORM\OneToMany(mappedBy: 'boisson', targetEntity: BoissonTaille::class)]
     private $boissonTailles;
 
