@@ -16,17 +16,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 #[ApiResource(
-    subresourceOperations: [
-        'menu_get_subresource' => [
-            'method' => 'GET',
-            'path' => '/menus/{id}/tailles',
-        ],
-    ],
+
     collectionOperations:[
         "GET"=>[
-            'normalization_context' => ['groups' => ['simple']],
+            'normalization_context' => ['groups' => ['menu:read']],
         ],
-
         'menu'=>[
             'method'=>'POST',
             'deserialize'=>false,
@@ -39,16 +33,16 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
             'method' => 'get',
             "path"=>"/menus/{id}" ,
             'requirements' => ['id' => '\d+'],
-            'normalization_context' => ['groups' => ['all']],
+            'normalization_context' => ['groups' => ['menu:read']],
             ],
             "delete"=>[
                 "path"=>"/menus/{id}",
-                'normalization_context' => ['groups' => ['simple']],
+                'normalization_context' => ['groups' => ['menu:read']],
                 "security" => "is_granted('ROLE_GESTIONNAIRE')",
                 "security_message"=>"Vous n'avez pas access à cette Ressource",  
             ],
             "put"=>[
-                'normalization_context' => ['groups' => ['simple']],
+                'normalization_context' => ['groups' => ['menu:read']],
                 "security" => "is_granted('ROLE_GESTIONNAIRE')",
                 "security_message"=>"Vous n'avez pas access à cette Ressource", 
             ]
@@ -65,55 +59,34 @@ class Menu  extends Produit
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
-    #[Groups(["simple","all"])]
-    #[ORM\ManyToMany(targetEntity:Taille::class, inversedBy: 'menus',cascade:['persist'])]
-    #[ApiSubresource()]
-    private $tailles;
 
-    #[Groups(["simple"])]
+    #[Groups(['menu:read'])]
     #[ORM\ManyToMany(targetEntity: FritesPortion::class, inversedBy: 'menus',cascade:['persist'])]
     #[ApiSubresource()]
     private $frites;
 
-    #[Groups(["simple"])]
+    #[Groups(['menu:read'])]
     #[ORM\OneToMany(mappedBy: 'menus', targetEntity: MenuBurger::class,cascade:['persist'])]
     #[SerializedName("burgers")]
     private $menuBurgers;
+
+    #[Groups(['menu:read'])]
+    #[SerializedName("tailles")]
+    #[ApiSubresource()]
+    #[ORM\OneToMany(mappedBy: 'menu', targetEntity: TailleMenu::class,cascade:['persist'])]
+    private $tailleMenus;
 
     // #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuTaille::class)]
     // private $menuTailles;
 
     public function __construct()
     {   
-        $this->tailles = new ArrayCollection();
+        // $this->tailles = new ArrayCollection();
         $this->frites = new ArrayCollection();
         $this->menuBurgers = new ArrayCollection();
+        $this->tailleMenus = new ArrayCollection();
     }
 
-
-    /**
-     * @return Collection<int, Taille>
-     */
-    public function getTailles(): Collection
-    {
-        return $this->tailles;
-    }
-
-    public function addTaille(Taille $taille): self
-    {
-        if (!$this->tailles->contains($taille)) {
-            $this->tailles[] = $taille;
-        }
-
-        return $this;
-    }
-
-    public function removeTaille(Taille $taille): self
-    {
-        $this->tailles->removeElement($taille);
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, FritesPortion>
@@ -205,5 +178,35 @@ class Menu  extends Produit
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection<int, TailleMenu>
+     */
+    public function getTailleMenus(): Collection
+    {
+        return $this->tailleMenus;
+    }
+
+    public function addTailleMenu(TailleMenu $tailleMenu): self
+    {
+        if (!$this->tailleMenus->contains($tailleMenu)) {
+            $this->tailleMenus[] = $tailleMenu;
+            $tailleMenu->setMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTailleMenu(TailleMenu $tailleMenu): self
+    {
+        if ($this->tailleMenus->removeElement($tailleMenu)) {
+            // set the owning side to null (unless already changed)
+            if ($tailleMenu->getMenu() === $this) {
+                $tailleMenu->setMenu(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

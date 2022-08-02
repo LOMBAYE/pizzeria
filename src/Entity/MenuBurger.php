@@ -14,7 +14,7 @@ class MenuBurger
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[Groups(["menu:read","menu:simple","simple"])]
+    #[Groups(["menu:read","simple"])]
     #[ORM\Column(type: 'integer')]
     private $quantite;
 
@@ -22,7 +22,7 @@ class MenuBurger
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuBurgers')]
     private $menus;
 
-    #[Groups(["menu:read","menu:simple","simple"])]
+    #[Groups(["menu:read","simple"])]
     #[ORM\ManyToOne(targetEntity: Burger::class, inversedBy: 'menuBurgers')]
     private $burgers;
 

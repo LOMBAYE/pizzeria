@@ -11,31 +11,31 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TailleRepository::class)]
-#[ApiResource() ]
+#[ApiResource()]
 class Taille
 {
-    #[Groups(["simple","all"])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["menu:read"])]
     private $id;
 
-    #[Groups(["simple","all"])]
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["menu:read"])]
     private $libelle;
 
-    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'tailles')]
-    private $menus;
-
     #[ApiSubresource()] 
-    #[Groups(["simple","all"])]
     #[ORM\OneToMany(mappedBy: 'taille', targetEntity: BoissonTaille::class)]
     private $boissonTailles;
 
+    #[ORM\OneToMany(mappedBy: 'taille', targetEntity: TailleMenu::class)]
+    private $tailleMenus;
+
     public function __construct()
     {
-        $this->menus = new ArrayCollection();
+        // $this->menus = new ArrayCollection();
         $this->boissonTailles = new ArrayCollection();
+        $this->tailleMenus = new ArrayCollection();
     }
 
 
@@ -56,31 +56,7 @@ class Taille
         return $this;
     }
 
-      /**
-     * @return Collection<int, Menu>
-     */
-    public function getMenus(): Collection
-    {
-        return $this->menus;
-    }
 
-    public function addMenu(Menu $menu): self
-    {
-        if (!$this->menus->contains($menu)) {
-            $this->menus[] = $menu;
-            $menu->addTaille($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMenu(Menu $menu): self
-    {
-        if ($this->menus->removeElement($menu)) {
-            $menu->removeTaille($this);
-        }
-        return $this;
-    }
 
 
   
@@ -108,6 +84,36 @@ class Taille
             // set the owning side to null (unless already changed)
             if ($boissonTaille->getTaille() === $this) {
                 $boissonTaille->setTaille(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TailleMenu>
+     */
+    public function getTailleMenus(): Collection
+    {
+        return $this->tailleMenus;
+    }
+
+    public function addTailleMenu(TailleMenu $tailleMenu): self
+    {
+        if (!$this->tailleMenus->contains($tailleMenu)) {
+            $this->tailleMenus[] = $tailleMenu;
+            $tailleMenu->setTaille($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTailleMenu(TailleMenu $tailleMenu): self
+    {
+        if ($this->tailleMenus->removeElement($tailleMenu)) {
+            // set the owning side to null (unless already changed)
+            if ($tailleMenu->getTaille() === $this) {
+                $tailleMenu->setTaille(null);
             }
         }
 

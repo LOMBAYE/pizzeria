@@ -37,11 +37,12 @@ class MenuAdd extends AbstractController{
                 return  $this->json('FRITE BII AMOUL!',400);
            }
         }
-        foreach(($parameters->tailles)[0] as $b){
-            $taille=$tailleRepo->find($b);
+        foreach(($parameters->tailles)[0] as $t){
+            $taille=$tailleRepo->find($t);
             if($taille){
+                // faire la meme chose que les burgers
                 // $prix+=$taille->getPrix();
-                $menu->addTaille($taille);
+                // $menu->addTaille($taille);
             }else{
                 return  $this->json('Taille inexistante!',400);
            }

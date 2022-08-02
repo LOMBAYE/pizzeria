@@ -66,6 +66,10 @@ class Commande
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $expedie=false;
 
+    #[Groups(["simple","read:simple"])]
+    #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commandes')]
+    private $zone;
+
 
     public function __construct()
     {
@@ -173,6 +177,18 @@ class Commande
     public function setExpedie(?bool $expedie): self
     {
         $this->expedie = $expedie;
+
+        return $this;
+    }
+
+    public function getZone(): ?Zone
+    {
+        return $this->zone;
+    }
+
+    public function setZone(?Zone $zone): self
+    {
+        $this->zone = $zone;
 
         return $this;
     }
