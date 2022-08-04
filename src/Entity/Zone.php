@@ -17,13 +17,15 @@ class Zone
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["livreur","commande"])]
     private $id;
 
-    #[Groups(["livreur"])]
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["livreur","commande","client:read"])]
     private $nom;
 
     #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups(["livreur","commande","client:read"])]
     private $coutLivraison;
 
     #[ORM\Column(type: 'boolean', nullable: true)]

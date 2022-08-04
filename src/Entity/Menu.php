@@ -54,9 +54,11 @@ class Menu  extends Produit
 {
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['menu:read'])]
     protected $nom;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['menu:read'])]
     protected $prix;
 
 

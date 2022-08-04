@@ -11,21 +11,32 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TailleRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations:[
+        'GET'=>[
+            'normalization_context' => ['groups' => ["taille:read"]],
+            
+        ],"POST"
+    ],
+    itemOperations:[
+        'GET'=>['normalization_context'=>['groups' => ['taille:read']]]
+    ]
+)]
 class Taille
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["menu:read"])]
+    #[Groups(["menu:read","taille:read","simple"])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["menu:read"])]
+    #[Groups(["menu:read","taille:read","simple"])]
     private $libelle;
 
     #[ApiSubresource()] 
     #[ORM\OneToMany(mappedBy: 'taille', targetEntity: BoissonTaille::class)]
+    #[Groups(["menu:read","taille:read"])]
     private $boissonTailles;
 
     #[ORM\OneToMany(mappedBy: 'taille', targetEntity: TailleMenu::class)]

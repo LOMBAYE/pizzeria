@@ -14,12 +14,12 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
     collectionOperations:[
         "GET"=>[
             'normalization_context' => ['groups' => ['commande']],
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message"=>"Vous n'avez pas acces à cette Ressource",
         ],
         "POST"=>[
             // 'normalization_context' => ['groups' => ['read:simple']],
-            'denormalization_context' => ['groups' => ['simple']],
+            'denormalization_context' => ['groups' => ['commande']],
             "security" => "is_granted('ROLE_CLIENT')",
             "security_message"=>"Vous n'avez pas acces à cette Ressource",
         ],
@@ -32,6 +32,7 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["commande","client:read"])]
     private $id;
 
     public function getId(): ?int
@@ -41,34 +42,40 @@ class Commande
 
     
     #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups(["commande","client:read"])]
     private $isEtat=true;
 
     #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(["commande","client:read"])]
     private $numero;
 
-    #[Groups(["commande"])]
     #[ORM\Column(type: 'date', nullable: true)]
+    #[Groups(["commande","client:read"])]
     private $date;
 
-    #[Groups(["commande","livreur"])]
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
+    #[Groups(["commande"])]
     private $client;
 
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneDeCommande::class,cascade:['persist'])]
-    #[Groups(["simple"])]
     #[SerializedName("Produits")]
+    #[Groups(["commande","client:read"])]
     private $ligneDeCommandes;
 
-    // #[Groups(["commande"])]
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
     private $livraison;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups(["commande","client:read"])]
     private $expedie=false;
 
-    #[Groups(["simple","read:simple"])]
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commandes')]
+    #[Groups(["commande","client:read"])]
     private $zone;
+
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups(["commande","client:read"])]
+    private $modeReception=true;
 
 
     public function __construct()
@@ -189,6 +196,18 @@ class Commande
     public function setZone(?Zone $zone): self
     {
         $this->zone = $zone;
+
+        return $this;
+    }
+
+    public function isModeReception(): ?bool
+    {
+        return $this->modeReception;
+    }
+
+    public function setModeReception(?bool $modeReception): self
+    {
+        $this->modeReception = $modeReception;
 
         return $this;
     }

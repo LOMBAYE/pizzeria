@@ -14,7 +14,7 @@ class MenuBurger
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[Groups(["menu:read","simple"])]
+    #[Groups(["menu:read","menu:simple","simple"])]
     #[ORM\Column(type: 'integer')]
     private $quantite;
 

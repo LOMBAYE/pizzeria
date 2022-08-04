@@ -13,25 +13,31 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations:[
-        'get','post'=>[
+        'get'=>[
             'normalization_context'=>[
                 'groups'=>[
-                    'read:users'
+                    'client:read'
                 ]
             ]
         ],
+        'post'
+    ],
+    itemOperations:[
+        'get'=>[
+            'normalization_context'=>['groups' => ['client:read']]
+        ]
     ]
 )]
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
 {
-    #[Groups(['read:users','livreur'])]
+    #[Groups(['client:read','livreur',"commande"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $telephone;
 
-    #[Groups(["commande"])]
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]
+    #[Groups(['client:read'])]
     private $commandes;
     
     public function __construct()

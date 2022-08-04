@@ -56,6 +56,10 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
            $image=$data->getBImage();
            $data->setImage(file_get_contents($image));
         }
+        if($data instanceof BoissonTaille){
+            $image=$data->getFakeImg();
+            $data->setImage(file_get_contents($image));
+         }
         
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();

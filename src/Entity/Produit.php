@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
     collectionOperations:[
         "GET"=>[
             'method' => 'get',
-            'normalization_context' => ['groups' => ['simple']]
+            // 'normalization_context' => ['groups' => ['simple']]
         ]
         ],
         itemOperations:[
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
             'method' => 'get',
             "path"=>"/produits/{id}" ,
             'requirements' => ['id' => '\d+'],
-            'normalization_context' => ['groups' => ['all']],
+            // 'normalization_context' => ['groups' => ['all']],
             ],
             "delete"=>[
                 "path"=>"/produits/{id}" 
@@ -42,20 +42,20 @@ class Produit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["simple"])]
+    #[Groups(["simple","menu:read","commande","client:read"])]
     #[ORM\Column(type: 'integer')]
     protected $id;
 
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
-    #[Groups(["all","simple"])]
+    #[Groups(["all","simple","menu:read","commande","client:read"])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $nom;
 
-    #[Groups([ "all","simple"])]
+    #[Groups([ "all","simple","menu:read","commande","client:read"])]
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
-    #[Groups([ "all","simple"])]
+    #[Groups([ "all","simple","menu:read"])]
     #[ORM\Column(type: 'blob')]
     protected $image;
 
