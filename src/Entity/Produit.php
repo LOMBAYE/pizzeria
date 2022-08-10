@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
             'method' => 'get',
             "path"=>"/produits/{id}" ,
             'requirements' => ['id' => '\d+'],
-            // 'normalization_context' => ['groups' => ['all']],
+            'normalization_context' => ['groups' => ['simple']],
             ],
             "delete"=>[
                 "path"=>"/produits/{id}" 

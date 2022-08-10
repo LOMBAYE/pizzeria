@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'method' => 'get',
             "path"=>"/burgers/{id}" ,
             'requirements' => ['id' => '\d+'],
-            'normalization_context' => ['groups' => ['all']],
+            'normalization_context' => ['groups' => ['simple']],
             ],
             "delete"=>[
                 "path"=>"/burgers/{id}" ,

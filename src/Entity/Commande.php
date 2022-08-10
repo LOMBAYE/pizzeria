@@ -20,10 +20,16 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         "POST"=>[
             // 'normalization_context' => ['groups' => ['read:simple']],
             'denormalization_context' => ['groups' => ['commande']],
-            "security" => "is_granted('ROLE_CLIENT')",
+            // "security" => "is_granted('ROLE_CLIENT')",
             "security_message"=>"Vous n'avez pas acces à cette Ressource",
         ],
         ],
+        itemOperations:[
+            'GET'=>[
+                'normalization_context' => ['groups' => ['commande']],
+            ],
+            'PUT','PATCH'
+        ]
 )]
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
@@ -41,15 +47,15 @@ class Commande
     }
 
     
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: 'string', nullable: true)]
     #[Groups(["commande","client:read"])]
-    private $isEtat=true;
+    private $isEtat;
 
     #[ORM\Column(type: 'string', nullable: true)]
     #[Groups(["commande","client:read"])]
     private $numero;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     #[Groups(["commande","client:read"])]
     private $date;
 
@@ -77,20 +83,25 @@ class Commande
     #[Groups(["commande","client:read"])]
     private $modeReception=true;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups(["commande","client:read"])]
+    private $prix;
+
 
     public function __construct()
     {
         $this->ligneDeCommandes = new ArrayCollection();
         $this->date=new \DateTime();
         $this->numero="NUMERO".date("dmYhis");
+        $this->isEtat="en cours";
     }
 
-    public function isIsEtat(): ?bool
+    public function isIsEtat(): ?string
     {
         return $this->isEtat;
     }
 
-    public function setIsEtat(?bool $isEtat): self
+    public function setIsEtat(?string $isEtat): self
     {
         $this->isEtat = $isEtat;
 
@@ -208,6 +219,18 @@ class Commande
     public function setModeReception(?bool $modeReception): self
     {
         $this->modeReception = $modeReception;
+
+        return $this;
+    }
+
+    public function getPrix(): ?int
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(?int $prix): self
+    {
+        $this->prix = $prix;
 
         return $this;
     }

@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: TailleRepository::class)]
 #[ApiResource(
@@ -37,6 +38,7 @@ class Taille
     #[ApiSubresource()] 
     #[ORM\OneToMany(mappedBy: 'taille', targetEntity: BoissonTaille::class)]
     #[Groups(["menu:read","taille:read"])]
+    #[SerializedName("boisson")]
     private $boissonTailles;
 
     #[ORM\OneToMany(mappedBy: 'taille', targetEntity: TailleMenu::class)]
