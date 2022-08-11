@@ -38,7 +38,7 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $id;
 
     public function getId(): ?int
@@ -48,31 +48,31 @@ class Commande
 
     
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $isEtat;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $numero;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $date;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
-    #[Groups(["commande"])]
+    #[Groups(["commande","zone"])]
     private $client;
 
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneDeCommande::class,cascade:['persist'])]
     #[SerializedName("Produits")]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $ligneDeCommandes;
 
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
     private $livraison;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $expedie=false;
 
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commandes')]

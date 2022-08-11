@@ -11,24 +11,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
-    itemOperations:[
-        "GET"=>[
-            'normalization_context' => ['groups' => ['livreur']],
-        ]
-    ]
+   
 )]
 
 #[ORM\Entity(repositoryClass: LivreurRepository::class)]
 class Livreur extends User
 {
-    #[Groups(["livreur"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $matricule;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $etat;
     
-    #[Groups(["livreur"])]
     #[ORM\OneToMany(mappedBy: 'livreur', targetEntity: Livraison::class)]
     private $livraisons;
 

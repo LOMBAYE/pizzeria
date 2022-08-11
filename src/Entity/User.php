@@ -37,12 +37,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface{
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['livreur',"commande","client:read"])]
+    #[Groups(["commande","client:read"])]
     protected $id;
 
     
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Groups(['livreur',"commande","client:read"])]
+    #[Groups(["commande","client:read"])]
     protected $email;
 
     #[ORM\Column(type: 'json')]
@@ -52,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface{
     protected $password;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['livreur',"commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     protected $nomComplet;
 
     // #[ORM\Column(type: 'string', length: 255, nullable: true)]

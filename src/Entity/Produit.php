@@ -42,16 +42,16 @@ class Produit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(["simple","menu:read","commande","client:read"])]
+    #[Groups(["simple","menu:read","commande","client:read","zone"])]
     #[ORM\Column(type: 'integer')]
     protected $id;
 
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
-    #[Groups(["all","simple","menu:read","commande","client:read"])]
+    #[Groups(["all","simple","menu:read","commande","client:read","zone"])]
     #[ORM\Column(type: 'string', length: 255)]
     protected $nom;
 
-    #[Groups([ "all","simple","menu:read","commande","client:read"])]
+    #[Groups([ "all","simple","menu:read","commande","client:read","zone"])]
     #[ORM\Column(type: 'integer')]
     protected $prix;
 

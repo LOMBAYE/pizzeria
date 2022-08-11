@@ -11,8 +11,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations:[
-        "POST"=>[
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
+        "GET","POST"=>[
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message"=>"Vous n'avez pas acces à cette Ressource",
         ]
     ]
@@ -29,14 +29,12 @@ class Livraison
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $isEtat=true;
 
-    #[Groups(["livreur"])]
     #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Commande::class)]
     private $commandes;
 
     #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'livraisons')]
     private $livreur;
 
-    #[Groups(["livreur"])]
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
     private $zone;
 

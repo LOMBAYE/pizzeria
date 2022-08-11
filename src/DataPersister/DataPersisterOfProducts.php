@@ -43,9 +43,9 @@ class DataPersisterOfProducts implements ContextAwareDataPersisterInterface
                 dd($menuBurger->getBurgers()->getNom());
                 $prix+=$menuBurger->getBurgers()->getPrix()*$menuBurger->getQuantite();
             }
-            foreach ($data->getTailles() as $taille){
-                // $prix+=$taille->getPrix();
-            }
+            // foreach ($data->getTailles() as $taille){
+            //     // $prix+=$taille->getPrix();
+            // }
             foreach ($data->getFrites() as $frite){
                 $prix+=$frite->getPrix();
             }

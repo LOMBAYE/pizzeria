@@ -32,8 +32,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client extends User
 {
-    #[Groups(['client:read','livreur',"commande"])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['client:read',"commande","zone"])]
     private $telephone;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Commande::class)]

@@ -9,7 +9,18 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource()]
+#[ApiResource(
+    collectionOperations:[
+        'get'=>[
+            'normalization_context' => ['groups' => ['zone']]
+        ]
+        ],
+    itemOperations:[
+        'get'=>[
+            'normalization_context' => ['groups' => ['zone']]
+        ]
+    ]    
+)]
 
 #[ORM\Entity(repositoryClass: ZoneRepository::class)]
 class Zone
@@ -17,27 +28,29 @@ class Zone
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["livreur","commande"])]
+    #[Groups(["commande","zone"])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["livreur","commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $nom;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(["livreur","commande","client:read"])]
+    #[Groups(["commande","client:read","zone"])]
     private $coutLivraison;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $isEtat=true;
 
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Quartier::class)]
+    #[Groups(["zone"])]
     private $quartiers;
 
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Livraison::class)]
     private $livraisons;
 
     #[ORM\OneToMany(mappedBy: 'zone', targetEntity: Commande::class)]
+    #[Groups(["zone"])]
     private $commandes;
 
     public function __construct()
