@@ -71,6 +71,7 @@ class DataPersisterForCommande implements ContextAwareDataPersisterInterface
                     ' est deja en livraison'],Response::HTTP_BAD_REQUEST);
                 }
                 $commande->setExpedie(true);
+                $commande->setIsEtat('en cours de livraison');
             }
             $livreurDispo=$this->livreurRepo->findByEtat('disponible');
             $count=count($livreurDispo)-1;

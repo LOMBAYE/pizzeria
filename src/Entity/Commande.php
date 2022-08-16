@@ -38,7 +38,7 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $id;
 
     public function getId(): ?int
@@ -48,31 +48,31 @@ class Commande
 
     
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $isEtat;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $numero;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $date;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]
-    #[Groups(["commande","zone"])]
+    #[Groups(["commande","zone","livraison"])]
     private $client;
 
     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneDeCommande::class,cascade:['persist'])]
     #[SerializedName("Produits")]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $ligneDeCommandes;
 
     #[ORM\ManyToOne(targetEntity: Livraison::class, inversedBy: 'commandes')]
     private $livraison;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $expedie=false;
 
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'commandes')]
@@ -80,11 +80,11 @@ class Commande
     private $zone;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","livraison"])]
     private $modeReception=true;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(["commande","client:read"])]
+    #[Groups(["commande","client:read","livraison"])]
     private $prix;
 
 

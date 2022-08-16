@@ -18,9 +18,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Livreur extends User
 {
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(["livraison"])]
     private $matricule;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["livraison"])]
     private $etat;
     
     #[ORM\OneToMany(mappedBy: 'livreur', targetEntity: Livraison::class)]

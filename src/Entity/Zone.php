@@ -28,15 +28,15 @@ class Zone
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["commande","zone"])]
+    #[Groups(["commande","zone","livraison"])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $nom;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $coutLivraison;
 
     #[ORM\Column(type: 'boolean', nullable: true)]

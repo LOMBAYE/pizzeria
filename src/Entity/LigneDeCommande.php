@@ -16,18 +16,18 @@ class LigneDeCommande
     private $id;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $quantite;
 
     #[ORM\ManyToOne(targetEntity: Commande::class, inversedBy: 'ligneDeCommandes')]
     private $commande;
 
     #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: 'ligneDeCommandes')]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $produit;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(["commande","client:read","zone"])]
+    #[Groups(["commande","client:read","zone","livraison"])]
     private $prix;
 
     public function getId(): ?int

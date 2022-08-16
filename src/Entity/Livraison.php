@@ -11,9 +11,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
     collectionOperations:[
-        "GET","POST"=>[
+        "GET"=>[
+            'normalization_context' => ['groups' => ['livraison']],
             // "security" => "is_granted('ROLE_GESTIONNAIRE')",
             "security_message"=>"Vous n'avez pas acces à cette Ressource",
+        ],"POST"
+    ],
+    itemOperations:[
+        'get'=>[
+            'normalization_context' => ['groups' => ['livraison']],
         ]
     ]
 )]
@@ -24,26 +30,36 @@ class Livraison
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(["livraison"])]
     private $id;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups(["livraison"])]
     private $isEtat=true;
 
     #[ORM\OneToMany(mappedBy: 'livraison', targetEntity: Commande::class)]
+    #[Groups(["livraison"])]
     private $commandes;
 
     #[ORM\ManyToOne(targetEntity: Livreur::class, inversedBy: 'livraisons')]
+    #[Groups(["livraison"])]
     private $livreur;
 
     #[ORM\ManyToOne(targetEntity: Zone::class, inversedBy: 'livraisons')]
+    #[Groups(["livraison"])]
     private $zone;
 
     #[ORM\ManyToOne(targetEntity: Gestionnaire::class, inversedBy: 'livraisons')]
     private $gestionnaire;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Groups(["livraison"])]
+    private $date;
+
     public function __construct()
     {
         $this->commandes = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -125,6 +141,18 @@ class Livraison
     public function setGestionnaire(?Gestionnaire $gestionnaire): self
     {
         $this->gestionnaire = $gestionnaire;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(?\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }
