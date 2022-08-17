@@ -19,11 +19,11 @@ class BoissonTaille
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["simple","boisson:read"])]
+    #[Groups(["simple"])]
     private $id;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    #[Groups(["menu:read","simple","boisson:read"])]
+    #[Groups(["menu:read","simple"])]
     private $qteEnStock;
 
     #[ORM\ManyToOne(targetEntity: Taille::class, inversedBy: 'boissonTailles')]

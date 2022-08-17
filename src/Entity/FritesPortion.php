@@ -15,9 +15,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'normalization_context' => ['groups' => ['simple']]
         ],
         "POST"=>[
-            'normalization_context' => ['groups' => ['simple']],
-            "security" => "is_granted('ROLE_GESTIONNAIRE')",
-            "security_message"=>"Vous n'avez pas access à cette Ressource", 
+            // 'normalization_context' => ['groups' => ['simple']],
+            // "security" => "is_granted('ROLE_GESTIONNAIRE')",
+            // "security_message"=>"Vous n'avez pas access à cette Ressource", 
         ]
         ],
         itemOperations:[
@@ -47,14 +47,14 @@ class FritesPortion extends Produit
     #[Groups(["simple"])]
     private $portions;
 
-    
-    #[ORM\ManyToMany(targetEntity: Menu::class, mappedBy: 'frites')]
-    private $menus;
+
+    #[ORM\OneToMany(mappedBy: 'frite', targetEntity: MenuFrite::class)]
+    private $menuFrites;
 
     public function __construct()
     {
         parent::__construct();
-        $this->menus = new ArrayCollection();
+        $this->menuFrites = new ArrayCollection();
     }
    
     public function getPortions(): ?string
@@ -69,44 +69,36 @@ class FritesPortion extends Produit
         return $this;
     }
 
+
     /**
-     * @return Collection<int, Menu>
+     * @return Collection<int, MenuFrite>
      */
-    public function getMenus(): Collection
+    public function getMenuFrites(): Collection
     {
-        return $this->menus;
+        return $this->menuFrites;
     }
 
-    public function addMenu(Menu $menu): self
+    public function addMenuFrite(MenuFrite $menuFrite): self
     {
-        if (!$this->menus->contains($menu)) {
-            $this->menus[] = $menu;
-            $menu->addFrite($this);
+        if (!$this->menuFrites->contains($menuFrite)) {
+            $this->menuFrites[] = $menuFrite;
+            $menuFrite->setFrite($this);
         }
 
         return $this;
     }
 
-    public function removeMenu(Menu $menu): self
+    public function removeMenuFrite(MenuFrite $menuFrite): self
     {
-        if ($this->menus->removeElement($menu)) {
-            $menu->removeFrite($this);
+        if ($this->menuFrites->removeElement($menuFrite)) {
+            // set the owning side to null (unless already changed)
+            if ($menuFrite->getFrite() === $this) {
+                $menuFrite->setFrite(null);
+            }
         }
 
         return $this;
     }
-
-    // public function getComplement(): ?Complement
-    // {
-    //     return $this->complement;
-    // }
-
-    // public function setComplement(?Complement $complement): self
-    // {
-    //     $this->complement = $complement;
-
-    //     return $this;
-    // }
 
 
  

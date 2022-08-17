@@ -28,8 +28,8 @@ class MenuAdd extends AbstractController{
         $menu=new Menu();
         $menu->setNom($parameters->nom);
         $menu->setImage(file_get_contents($parameters->bImage));
-        foreach(($parameters->frites)[0] as $f){
-            $frite=$friteRepo->find($f);
+        foreach(($parameters->frites) as $f){
+            $frite=$friteRepo->find($f->frite);
             if($frite){
                 $prix+=$frite->getPrix();
                 $menu->addFrite($frite);
@@ -37,12 +37,12 @@ class MenuAdd extends AbstractController{
                 return  $this->json('FRITE BII AMOUL!',400);
            }
         }
-        foreach(($parameters->tailles)[0] as $t){
-            $taille=$tailleRepo->find($t);
+        foreach(($parameters->tailles) as $t){
+            // dd($t);
+            $taille=$tailleRepo->find($t->taille);
             if($taille){
-                // faire la meme chose que les burgers
                 // $prix+=$taille->getPrix();
-                // $menu->addTaille($taille);
+                $menu->addTaille($taille,$t->quantite);
             }else{
                 return  $this->json('Taille inexistante!',400);
            }

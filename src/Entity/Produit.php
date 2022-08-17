@@ -55,8 +55,8 @@ class Produit
     #[ORM\Column(type: 'integer')]
     protected $prix;
 
-    #[Groups([ "all","simple","menu:read"])]
     #[ORM\Column(type: 'blob')]
+    #[Groups([ "all","simple","menu:read"])]
     protected $image;
 
     #[SerializedName("image")]

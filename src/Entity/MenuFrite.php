@@ -3,29 +3,26 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\TailleMenuRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\MenuFriteRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ApiResource()]
-#[ORM\Entity(repositoryClass: TailleMenuRepository::class)]
-class TailleMenu
+#[ORM\Entity(repositoryClass: MenuFriteRepository::class)]
+class MenuFrite
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(["menu:read"])]
     private $id;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'integer', nullable: true)]
     #[Groups(["menu:read",'add:menu'])]
     private $quantite;
 
-    #[ORM\ManyToOne(targetEntity: Taille::class, inversedBy: 'tailleMenus')]
+    #[ORM\ManyToOne(targetEntity: FritesPortion::class, inversedBy: 'menuFrites')]
     #[Groups(["menu:read",'add:menu'])]
-    private $taille;
+    private $frite;
 
-    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'tailleMenus')]
+    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuFrites')]
     private $menu;
 
     public function getId(): ?int
@@ -38,21 +35,21 @@ class TailleMenu
         return $this->quantite;
     }
 
-    public function setQuantite(int $quantite): self
+    public function setQuantite(?int $quantite): self
     {
         $this->quantite = $quantite;
 
         return $this;
     }
 
-    public function getTaille(): ?Taille
+    public function getFrite(): ?FritesPortion
     {
-        return $this->taille;
+        return $this->frite;
     }
 
-    public function setTaille(?Taille $taille): self
+    public function setFrite(?FritesPortion $frite): self
     {
-        $this->taille = $taille;
+        $this->frite = $frite;
 
         return $this;
     }

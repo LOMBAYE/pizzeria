@@ -21,6 +21,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         "GET"=>[
             'normalization_context' => ['groups' => ['menu:read']],
         ],
+        'POST'=>[
+            'denormalization_context' => ['groups' => ['add:menu']],
+        ],
         'menu'=>[
             'method'=>'POST',
             'deserialize'=>false,
@@ -54,65 +57,36 @@ class Menu  extends Produit
 {
     #[Assert\NotBlank(message:"Le nom est Obligatoire")]
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['menu:read'])]
+    #[Groups(['menu:read','add:menu'])]
     protected $nom;
 
     #[ORM\Column(type: 'integer')]
     #[Groups(['menu:read'])]
     protected $prix;
 
-
-    #[Groups(['menu:read'])]
-    #[ORM\ManyToMany(targetEntity: FritesPortion::class, inversedBy: 'menus',cascade:['persist'])]
-    #[ApiSubresource()]
-    private $frites;
-
-    #[Groups(['menu:read'])]
     #[ORM\OneToMany(mappedBy: 'menus', targetEntity: MenuBurger::class,cascade:['persist'])]
+    #[Groups(['menu:read','add:menu'])]
     #[SerializedName("burgers")]
     private $menuBurgers;
 
-    #[Groups(['menu:read'])]
-    #[SerializedName("tailles")]
-    #[ApiSubresource()]
     #[ORM\OneToMany(mappedBy: 'menu', targetEntity: TailleMenu::class,cascade:['persist'])]
+    #[ApiSubresource()]
+    #[Groups(['menu:read','add:menu'])]
+    #[SerializedName("tailles")]
     private $tailleMenus;
 
-    // #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuTaille::class)]
-    // private $menuTailles;
+    #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuFrite::class,cascade:['persist'])]
+    #[Groups(['menu:read','add:menu'])]
+    #[SerializedName("frites")]
+    private $menuFrites;
 
     public function __construct()
     {   
-        // $this->tailles = new ArrayCollection();
-        $this->frites = new ArrayCollection();
         $this->menuBurgers = new ArrayCollection();
         $this->tailleMenus = new ArrayCollection();
+        $this->menuFrites = new ArrayCollection();
     }
 
-
-    /**
-     * @return Collection<int, FritesPortion>
-     */
-    public function getFrites(): Collection
-    {
-        return $this->frites;
-    }
-
-    public function addFrite(FritesPortion $frite): self
-    {
-        if (!$this->frites->contains($frite)) {
-            $this->frites[] = $frite;
-        }
-
-        return $this;
-    }
-
-    public function removeFrite(FritesPortion $frite): self
-    {
-        $this->frites->removeElement($frite);
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, MenuBurger>
@@ -151,36 +125,6 @@ class Menu  extends Produit
         $this->addMenuBurger($menuBurger);
     }
 
-    // /**
-    //  * @return Collection<int, MenuTaille>
-    //  */
-    // public function getMenuTailles(): Collection
-    // {
-    //     return $this->menuTailles;
-    // }
-
-    // public function addMenuTaille(MenuTaille $menuTaille): self
-    // {
-    //     if (!$this->menuTailles->contains($menuTaille)) {
-    //         $this->menuTailles[] = $menuTaille;
-    //         $menuTaille->setMenu($this);
-    //     }
-
-    //     return $this;
-    // }
-
-    // public function removeMenuTaille(MenuTaille $menuTaille): self
-    // {
-    //     if ($this->menuTailles->removeElement($menuTaille)) {
-    //         // set the owning side to null (unless already changed)
-    //         if ($menuTaille->getMenu() === $this) {
-    //             $menuTaille->setMenu(null);
-    //         }
-    //     }
-
-    //     return $this;
-    // }
-
     /**
      * @return Collection<int, TailleMenu>
      */
@@ -211,4 +155,49 @@ class Menu  extends Produit
         return $this;
     }
 
+    public function addTaille(Taille $taille,int $qt=1){
+        $tailleMenu= new TailleMenu();
+        $tailleMenu->setTaille($taille);
+        $tailleMenu->setMenu($this);
+        $tailleMenu->setQuantite($qt);
+        $this->addTailleMenu($tailleMenu);
+    }
+
+    /**
+     * @return Collection<int, MenuFrite>
+     */
+    public function getMenuFrites(): Collection
+    {
+        return $this->menuFrites;
+    }
+
+    public function addMenuFrite(MenuFrite $menuFrite): self
+    {
+        if (!$this->menuFrites->contains($menuFrite)) {
+            $this->menuFrites[] = $menuFrite;
+            $menuFrite->setMenu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMenuFrite(MenuFrite $menuFrite): self
+    {
+        if ($this->menuFrites->removeElement($menuFrite)) {
+            // set the owning side to null (unless already changed)
+            if ($menuFrite->getMenu() === $this) {
+                $menuFrite->setMenu(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function addFrite(FritesPortion $frite,int $qt=1){
+        $menuFrite= new MenuFrite();
+        $menuFrite->setFrite($frite);
+        $menuFrite->setMenu($this);
+        $menuFrite->setQuantite($qt);
+        $this->addMenuFrite($menuFrite);
+    }
 }
